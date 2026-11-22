@@ -3,6 +3,7 @@
   "Description": "Device support plugin for CyberAxon D3",
   "Author": "Andrey Viktorov | JJHF",
   "Version": "0.1.1",
+  "Version": "0.1.0",
   "PluginUUID": "com.github.JJHF7.cyberaxon",
   "CodePathLin": "opendeck-cyberaxon-linux",
   "Icon": "assets/icon",
