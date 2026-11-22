@@ -1,13 +1,17 @@
 ![Plugin Icon](assets/icon.png)
 
 # OpenDeck CyberAxon
-# https://github.com/JJHF7/cyberaxon
-# Fork from Ajazz AKP03 / Mirabox N3 Plugin
-# by Andrey Viktorov
-# https://github.com/4ndv/opendeck-akp03
-# https://github.com/4ndv/mirajazz
 
-An unofficial plugin for CyberAxon D3 devices
+An unofficial [OpenDeck](https://github.com/nekename/OpenDeck) plugin that lets you use the programmable
+LCD keys of the **RayCue CyberAxon D3** docking station on **Linux**: assign actions and custom icons
+to each key, just like on a Stream Deck.
+
+This project is not affiliated with RayCue.
+
+Fork of the Ajazz AKP03 / Mirabox N3 plugin by Andrey Viktorov:
+
+- https://github.com/4ndv/opendeck-akp03
+- https://github.com/4ndv/mirajazz
 
 ## OpenDeck version
 
@@ -15,22 +19,52 @@ Requires OpenDeck 2.5.0 or newer
 
 ## Supported devices
 
-- CyberAxon D3 (0600:3002)
+| Device | USB ID | Notes |
+|---|---|---|
+| RayCue CyberAxon D3 | `0600:3002` | 12 LCD keys, no encoders |
+
+The device identifies itself as `HOTSPOTEKUSB HID DEMO`. Check yours with:
+
+```sh
+lsusb | grep -i 0600:3002
+```
+
+RayCue states that the CyberAxon D5 shares the same hardware as the D3 and differs only in the screen
+function. The D5 has **not** been tested with this plugin.
 
 ## Platform support
 
-- Linux: Guaranteed (it was the only I needed and tested)
+- Linux: tested and working. It is the only platform the author needed and tested.
+- macOS and Windows: not supported.
 
 ## Installation
 
-1. Download an archive from [releases](https://github.com/JJHF7/cyberaxon/releases)
-2. In OpenDeck: Plugins -> Install from file
-3. Download [udev rules](./40-opendeck-cyberaxon.rules) and install them by copying into `/etc/udev/rules.d/` and running `sudo udevadm control --reload-rules`
-4. Unplug and plug again the device, restart OpenDeck
+1. Download `opendeck-cyberaxon.plugin.zip` and the udev rules from the
+   [latest release](https://github.com/JJHF7/cyberaxon/releases/latest)
+2. In OpenDeck: Plugins -> Install from file, and select the `.zip`
+3. Install the [udev rules](./40-opendeck-cyberaxon.rules) by copying them into `/etc/udev/rules.d/` and running
+   `sudo udevadm control --reload-rules`
+4. Unplug and plug again the device, then restart OpenDeck
 
-## Adding new devices
+The device should appear in OpenDeck as **RayCue CyberAxon D3**.
 
-Read [this wiki page](https://github.com/4ndv/opendeck-akp03/wiki/Adding-support-for-new-devices) for more information.
+## Known limitations
+
+- Only tested on one unit and one firmware version. If yours behaves differently, please open an issue.
+- Screen brightness is fixed by the plugin at start-up.
+- The manufacturer does not document the protocol. Support relies on the protocol shared by other
+  Mirabox/HSV-based devices (via [mirajazz](https://github.com/4ndv/mirajazz)), which this device appears to use.
+
+## Troubleshooting
+
+- **The device is not detected:** check that `lsusb` shows `0600:3002`, that the udev rules are installed,
+  then unplug and plug the device again and restart OpenDeck.
+- **The screen shows a screensaver instead of the keys:** the device waits for the host to initialise it.
+  If it stays that way with the plugin installed, open an issue and attach the plugin log.
+- **Permission errors on `/dev/hidraw*`:** the udev rules are missing or were not reloaded.
+
+When opening an issue, please include the output of `lsusb -v -d 0600:3002`, your Linux distribution and the
+OpenDeck version.
 
 ## Building
 
@@ -39,28 +73,29 @@ Read [this wiki page](https://github.com/4ndv/opendeck-akp03/wiki/Adding-support
 You'll need:
 
 - A Linux OS of some sort
-- Rust 1.87 and up with `x86_64-unknown-linux-gnu` and `x86_64-pc-windows-gnu` targets installed
+- Rust 1.87 and up with the `x86_64-unknown-linux-gnu` target installed
 - [just](https://just.systems)
+- `zip`
 
-On Arch Linux:
-
-```sh
-sudo pacman -S just mingw-w64-gcc mingw-w64-binutils
-```
-
-Adding rust targets:
+Adding the Rust target:
 
 ```sh
-rustup target add x86_64-pc-windows-gnu
 rustup target add x86_64-unknown-linux-gnu
 ```
 
 ### Building a release package
 
 ```sh
-$ just package
+just package
 ```
+
+The package is generated at `build/opendeck-cyberaxon.plugin.zip`.
 
 ## Acknowledgments
 
-This plugin is 100% based on the work of Andrey Viktorov and contributors of https://github.com/4ndv/opendeck-akp03 | https://github.com/4ndv/mirajazz
+This plugin is 100% based on the work of Andrey Viktorov and the contributors of
+https://github.com/4ndv/opendeck-akp03 and https://github.com/4ndv/mirajazz.
+
+Licensed under the GNU General Public License v3.0, like the original project. See [LICENSE](LICENSE).
+
+"RayCue" and "CyberAxon" are trademarks of their respective owners.
