@@ -1,6 +1,7 @@
 ![Plugin Icon](assets/icon.png)
 
 # OpenDeck CyberAxon
+# https://github.com/JJHF7/cyberaxon
 # Fork from Ajazz AKP03 / Mirabox N3 Plugin
 # by Andrey Viktorov
 # https://github.com/4ndv/opendeck-akp03
